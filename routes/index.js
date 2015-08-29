@@ -45,7 +45,6 @@ router.param('comment', function(req, res, next, id) {
 	query.exec(function (err, comment) {
 		if (err) { return next(err); }
 		if (!comment) {return next(new Error("Can't find comment")); }
-
 		req.comment = comment;
 		return next();
 	});
@@ -54,7 +53,7 @@ router.param('comment', function(req, res, next, id) {
 router.get('/posts/:post', function(req, res) {
 	req.post.populate('comments', function(err, post) {
 		if (err) { return next(err); }
-		
+
 		res.json(post);
 	});
 });
@@ -68,10 +67,10 @@ router.put('/posts/:post/upvote', function(req, res, next) {
 });	
 
 router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
-	req.comment.upvote(function(err, post) {
+	req.comment.upvote(function(err, comment) {
 		if (err) { return next(err); }
 
-		res.json(post);
+		res.json(comment);
 	});
 });	
 

@@ -13,3 +13,4 @@ CommentSchema.methods.upvote = function(cb) {
 };
 
 mongoose.model('Comment', CommentSchema);
+
