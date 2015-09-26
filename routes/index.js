@@ -74,7 +74,7 @@ router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
 	});
 });	
 
-router.post('/posts/:post/comments'), function(req, res, next) {
+router.post('/posts/:post/comments', function(req, res, next) {
 	var comment = new Comment(req.body);
 	comment.post = req.post;
 
@@ -88,6 +88,6 @@ router.post('/posts/:post/comments'), function(req, res, next) {
 			res.json(comment);
 		});
 	});
-};
+});
 
 module.exports = router;
