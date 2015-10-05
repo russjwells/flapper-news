@@ -25,11 +25,31 @@ function($stateProvider, $urlRouterProvider) {
 					return posts.get($stateParams.id);
 				}]
 			}
+		})
+		.state('login', {
+			url: '/login',
+			templateUrl: '/login.html',
+			controller: 'AuthCtrl',
+			onEnter: ['$state', 'auth', function($state, auth){
+				if (auth.isLoggedIn()) {
+					$state.go('home');
+				}
+			}]
+		})
+		.state('register', {
+			url: '/register',
+			templateUrl: '/register.html',
+			controller: 'AuthCtrl',
+			onEnter: ['$state', 'auth', function($state, auth){
+				if (auth.isLoggedIn()) {
+					$state.go('home');
+				}
+			}]
 		});
 	$urlRouterProvider.otherwise('home');
-}]);
-
-app.factory('auth', ['$http', '$window', function($stateParams, posts) {
+}])
+//was , posts
+.factory('auth', ['$http', '$window', function($stateParams, $window) {
 	var auth = {};
 
 	auth.saveToken = function(token) {
@@ -67,18 +87,42 @@ app.factory('auth', ['$http', '$window', function($stateParams, posts) {
 		});
 	}
 
-	auth.login = function(user) {
+	auth.logIn = function(user) {
 		return $http.post('/login', user).success(function(data) {
 			auth.saveToken(data.token);
 		});
 	}
 
-	auth.logout = function() {
+	auth.logOut = function() {
 		$window.localStorage.removeItem('flapper-news-token');
 	}
 
 	return auth;
 }])
+
+.controller('AuthCtrl', [
+'$scope',
+'$state',
+'auth',
+function($scope, $state, auth){
+  $scope.user = {};
+
+  $scope.register = function(){
+    auth.register($scope.user).error(function(error){
+      $scope.error = error;
+    }).then(function(){
+      $state.go('home');
+    });
+  };
+
+  $scope.logIn = function(){
+    auth.logIn($scope.user).error(function(error){
+      $scope.error = error;
+    }).then(function(){
+      $state.go('home');
+    });
+  };
+}]);
 
 app.factory('posts', ['$http', function($http){
 	var o = {
