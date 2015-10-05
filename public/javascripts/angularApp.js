@@ -48,8 +48,8 @@ function($stateProvider, $urlRouterProvider) {
 		});
 	$urlRouterProvider.otherwise('home');
 }])
-//was , posts
-.factory('auth', ['$http', '$window', function($stateParams, $window) {
+//was ,$stateParams, posts
+.factory('auth', ['$http', '$window', function($http, $window) {
 	var auth = {};
 
 	auth.saveToken = function(token) {
@@ -98,6 +98,15 @@ function($stateProvider, $urlRouterProvider) {
 	}
 
 	return auth;
+}])
+
+.controller('NavCtrl', [
+'$scope',
+'auth',
+function($scope, auth){
+  $scope.isLoggedIn = auth.isLoggedIn;
+  $scope.currentUser = auth.currentUser;
+  $scope.logOut = auth.logOut;
 }])
 
 .controller('AuthCtrl', [
